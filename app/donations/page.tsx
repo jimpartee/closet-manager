@@ -24,8 +24,8 @@ export default async function DonationsPage() {
   )
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 md:p-6 max-w-4xl mx-auto">
+      <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between sm:mb-6">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Donations</h1>
           <p className="text-sm text-gray-500 mt-1">Track your charitable giving</p>
@@ -40,9 +40,9 @@ export default async function DonationsPage() {
       </div>
 
       {/* Summary */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3 mb-2">
+      <div className="grid grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
+        <div className="rounded-xl border border-gray-200 bg-white p-3 md:p-5 shadow-sm">
+          <div className="flex items-center gap-2 md:gap-3 mb-2">
             <div className="rounded-lg bg-rose-50 p-2">
               <Heart className="h-4 w-4 text-rose-500" />
             </div>
@@ -50,8 +50,8 @@ export default async function DonationsPage() {
           </div>
           <p className="text-2xl font-semibold text-gray-900">{donations.length}</p>
         </div>
-        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3 mb-2">
+        <div className="rounded-xl border border-gray-200 bg-white p-3 md:p-5 shadow-sm">
+          <div className="flex items-center gap-2 md:gap-3 mb-2">
             <div className="rounded-lg bg-amber-50 p-2">
               <Package className="h-4 w-4 text-amber-500" />
             </div>
@@ -59,8 +59,8 @@ export default async function DonationsPage() {
           </div>
           <p className="text-2xl font-semibold text-gray-900">{totalItems}</p>
         </div>
-        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3 mb-2">
+        <div className="rounded-xl border border-gray-200 bg-white p-3 md:p-5 shadow-sm">
+          <div className="flex items-center gap-2 md:gap-3 mb-2">
             <div className="rounded-lg bg-green-50 p-2">
               <DollarSign className="h-4 w-4 text-green-500" />
             </div>

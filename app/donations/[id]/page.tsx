@@ -31,7 +31,7 @@ export default async function DonationDetailPage({
   const totalValue = donationItems.reduce((sum, di) => sum + (di.estimated_value || 0), 0)
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-4 md:p-6 max-w-3xl mx-auto">
       {/* Screen view */}
       <div className="print:hidden">
         <div className="flex items-center justify-between mb-6">
