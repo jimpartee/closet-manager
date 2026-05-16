@@ -106,6 +106,11 @@ export default async function ItemDetailPage({
                   {item.category}
                 </span>
               )}
+              {item.gender && (
+                <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-sm text-emerald-700">
+                  {item.gender}
+                </span>
+              )}
               {item.color && (
                 <span className="inline-flex items-center rounded-full bg-violet-50 px-3 py-1 text-sm text-violet-700">
                   {item.color}

@@ -32,6 +32,11 @@ export function ItemCard({ item }: ItemCardProps) {
           )}
           <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
           <div className="flex flex-wrap gap-1 mt-2">
+            {item.gender && (
+              <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-xs text-emerald-700">
+                {item.gender}
+              </span>
+            )}
             {item.color && (
               <span className="inline-flex items-center rounded-full bg-violet-50 px-2 py-0.5 text-xs text-violet-700">
                 {item.color}
