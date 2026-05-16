@@ -1,19 +1,24 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { Search } from 'lucide-react'
+import { useState, useMemo, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { Search, Layers } from 'lucide-react'
 import { Item, CATEGORIES, GENDERS } from '@/lib/types'
 import { ItemCard } from '@/components/item-card'
+import { BulkEditBar } from './bulk-edit-bar'
 
 interface ItemFiltersProps {
   items: Item[]
 }
 
 export function ItemFilters({ items }: ItemFiltersProps) {
+  const router = useRouter()
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('')
   const [gender, setGender] = useState('')
   const [status, setStatus] = useState<'all' | 'active' | 'donated'>('all')
+  const [bulkMode, setBulkMode] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const filtered = useMemo(() => {
     return items.filter((item) => {
@@ -28,8 +33,41 @@ export function ItemFilters({ items }: ItemFiltersProps) {
     })
   }, [items, search, category, gender, status])
 
+  const toggleItem = useCallback((id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }, [])
+
+  const allFilteredSelected =
+    filtered.length > 0 && filtered.every((i) => selectedIds.has(i.id))
+
+  const toggleSelectAll = () => {
+    if (allFilteredSelected) {
+      setSelectedIds((prev) => {
+        const next = new Set(prev)
+        filtered.forEach((i) => next.delete(i.id))
+        return next
+      })
+    } else {
+      setSelectedIds((prev) => {
+        const next = new Set(prev)
+        filtered.forEach((i) => next.add(i.id))
+        return next
+      })
+    }
+  }
+
+  const exitBulkMode = () => {
+    setBulkMode(false)
+    setSelectedIds(new Set())
+  }
+
   return (
-    <div>
+    <div className={bulkMode ? 'pb-36' : ''}>
       {/* Filter bar */}
       <div className="flex flex-wrap gap-3 mb-6">
         <div className="relative flex-1 min-w-48">
@@ -50,9 +88,7 @@ export function ItemFilters({ items }: ItemFiltersProps) {
         >
           <option value="">All Categories</option>
           {CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
+            <option key={c} value={c}>{c}</option>
           ))}
         </select>
 
@@ -63,9 +99,7 @@ export function ItemFilters({ items }: ItemFiltersProps) {
         >
           <option value="">All Genders</option>
           {GENDERS.map((g) => (
-            <option key={g} value={g}>
-              {g}
-            </option>
+            <option key={g} value={g}>{g}</option>
           ))}
         </select>
 
@@ -78,12 +112,41 @@ export function ItemFilters({ items }: ItemFiltersProps) {
           <option value="active">Active</option>
           <option value="donated">Donated</option>
         </select>
+
+        <button
+          type="button"
+          onClick={() => {
+            setBulkMode((v) => !v)
+            setSelectedIds(new Set())
+          }}
+          className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+            bulkMode
+              ? 'border-violet-300 bg-violet-50 text-violet-700'
+              : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Layers className="h-4 w-4" />
+          {bulkMode ? 'Done' : 'Bulk Edit'}
+        </button>
       </div>
 
-      {/* Results count */}
-      <p className="text-sm text-gray-500 mb-4">
-        Showing {filtered.length} of {items.length} items
-      </p>
+      {/* Count row with select-all in bulk mode */}
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-sm text-gray-500">
+          {bulkMode
+            ? `${selectedIds.size} of ${filtered.length} selected`
+            : `Showing ${filtered.length} of ${items.length} items`}
+        </p>
+        {bulkMode && filtered.length > 0 && (
+          <button
+            type="button"
+            onClick={toggleSelectAll}
+            className="text-sm text-violet-600 hover:text-violet-700 font-medium"
+          >
+            {allFilteredSelected ? 'Deselect all' : 'Select all'}
+          </button>
+        )}
+      </div>
 
       {/* Grid */}
       {filtered.length === 0 ? (
@@ -93,9 +156,26 @@ export function ItemFilters({ items }: ItemFiltersProps) {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {filtered.map((item) => (
-            <ItemCard key={item.id} item={item} />
+            <ItemCard
+              key={item.id}
+              item={item}
+              selectable={bulkMode}
+              selected={selectedIds.has(item.id)}
+              onToggle={() => toggleItem(item.id)}
+            />
           ))}
         </div>
+      )}
+
+      {bulkMode && (
+        <BulkEditBar
+          selectedIds={[...selectedIds]}
+          onCancel={exitBulkMode}
+          onApplied={() => {
+            exitBulkMode()
+            router.refresh()
+          }}
+        />
       )}
     </div>
   )
