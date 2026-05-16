@@ -2,9 +2,8 @@
 
 import { useState, useMemo } from 'react'
 import { Search } from 'lucide-react'
-import { Item } from '@/lib/types'
+import { Item, CATEGORIES, GENDERS } from '@/lib/types'
 import { ItemCard } from '@/components/item-card'
-import { CATEGORIES } from '@/lib/types'
 
 interface ItemFiltersProps {
   items: Item[]
@@ -13,6 +12,7 @@ interface ItemFiltersProps {
 export function ItemFilters({ items }: ItemFiltersProps) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('')
+  const [gender, setGender] = useState('')
   const [status, setStatus] = useState<'all' | 'active' | 'donated'>('all')
 
   const filtered = useMemo(() => {
@@ -22,10 +22,11 @@ export function ItemFilters({ items }: ItemFiltersProps) {
         item.name.toLowerCase().includes(search.toLowerCase()) ||
         (item.brand || '').toLowerCase().includes(search.toLowerCase())
       const matchesCategory = !category || item.category === category
+      const matchesGender = !gender || item.gender === gender
       const matchesStatus = status === 'all' || item.status === status
-      return matchesSearch && matchesCategory && matchesStatus
+      return matchesSearch && matchesCategory && matchesGender && matchesStatus
     })
-  }, [items, search, category, status])
+  }, [items, search, category, gender, status])
 
   return (
     <div>
@@ -51,6 +52,19 @@ export function ItemFilters({ items }: ItemFiltersProps) {
           {CATEGORIES.map((c) => (
             <option key={c} value={c}>
               {c}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={gender}
+          onChange={(e) => setGender(e.target.value)}
+          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+        >
+          <option value="">All Genders</option>
+          {GENDERS.map((g) => (
+            <option key={g} value={g}>
+              {g}
             </option>
           ))}
         </select>

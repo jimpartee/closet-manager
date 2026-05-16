@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react'
-import { CATEGORIES, SIZES, Location, Bag, Item } from '@/lib/types'
+import { CATEGORIES, GENDERS, SIZES, Location, Bag, Item } from '@/lib/types'
 import { toast } from 'sonner'
 
 const itemSchema = z.object({
@@ -16,6 +16,7 @@ const itemSchema = z.object({
   category: z.string().optional(),
   color: z.string().optional(),
   size: z.string().optional(),
+  gender: z.string().optional(),
   purchase_price: z.string().optional(),
   purchase_date: z.string().optional(),
   product_url: z.string().url().optional().or(z.literal('')),
@@ -51,6 +52,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
       category: defaultValues?.category || '',
       color: defaultValues?.color || '',
       size: defaultValues?.size || '',
+      gender: defaultValues?.gender || '',
       purchase_price: defaultValues?.purchase_price?.toString() || '',
       purchase_date: defaultValues?.purchase_date || '',
       product_url: defaultValues?.product_url || '',
@@ -204,6 +206,22 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
             ))}
           </select>
         </div>
+      </div>
+
+      {/* Gender */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+        <select
+          {...register('gender')}
+          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+        >
+          <option value="">Select gender</option>
+          {GENDERS.map((g) => (
+            <option key={g} value={g}>
+              {g}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

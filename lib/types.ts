@@ -23,6 +23,7 @@ export interface Item {
   subcategory?: string
   color?: string
   size?: string
+  gender?: string
   purchase_price?: number
   purchase_date?: string
   source: 'manual' | 'email_scan'
@@ -66,6 +67,8 @@ export interface DonationItem {
   estimated_value?: number
   item?: Item
 }
+
+export const GENDERS = ["Men's", "Women's", "Unisex"]
 
 export const CATEGORIES = [
   'Tops',

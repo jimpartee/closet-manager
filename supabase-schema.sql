@@ -24,6 +24,7 @@ create table items (
   subcategory text,
   color text,
   size text,
+  gender text, -- 'Men''s', 'Women''s', or 'Unisex'
   purchase_price numeric(10,2),
   purchase_date date,
   source text default 'manual', -- 'manual' or 'email_scan'
