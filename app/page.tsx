@@ -4,28 +4,18 @@ import { Plus, Mail, Package, Heart, DollarSign, AlertTriangle, Shirt } from 'lu
 import { Item } from '@/lib/types'
 
 async function getDashboardData() {
-  const missingEnvVars =
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL === 'your_supabase_url'
-
-  if (missingEnvVars) {
-    return { missingEnvVars: true, items: [] }
-  }
-
   try {
-    const res = await fetch(BASE_URL + '/api/items', {
-      cache: 'no-store',
-    })
-    if (!res.ok) return { missingEnvVars: false, items: [], error: 'Failed to fetch items' }
+    const res = await fetch(BASE_URL + '/api/items', { cache: 'no-store' })
+    if (!res.ok) return { items: [], error: 'Failed to fetch items' }
     const items: Item[] = await res.json()
-    return { missingEnvVars: false, items }
+    return { items }
   } catch {
-    return { missingEnvVars: false, items: [], error: 'Could not connect to database' }
+    return { items: [], error: 'Could not connect to database' }
   }
 }
 
 export default async function DashboardPage() {
-  const { missingEnvVars, items, error } = await getDashboardData()
+  const { items, error } = await getDashboardData()
 
   const activeItems = items.filter((i) => i.status === 'active')
   const donatedItems = items.filter((i) => i.status === 'donated')
@@ -56,18 +46,6 @@ export default async function DashboardPage() {
           </Link>
         </div>
       </div>
-
-      {missingEnvVars && (
-        <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="text-sm font-medium text-amber-800">Setup Required</p>
-            <p className="text-sm text-amber-700 mt-1">
-              Configure your environment variables in <code className="bg-amber-100 px-1 rounded">.env.local</code> to connect to Supabase and enable all features.
-            </p>
-          </div>
-        </div>
-      )}
 
       {error && (
         <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 flex items-start gap-3">
