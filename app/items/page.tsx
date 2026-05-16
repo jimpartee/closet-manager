@@ -20,8 +20,8 @@ export default async function ItemsPage() {
   const missingPhotos = items.filter(i => !i.image_url).length
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 md:p-6">
+      <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between sm:mb-6">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Wardrobe</h1>
           <p className="text-sm text-gray-500 mt-1">{items.length} items total</p>

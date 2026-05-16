@@ -51,18 +51,18 @@ export default async function ItemDetailPage({
   if (!item) notFound()
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 md:p-6 max-w-4xl mx-auto">
+      <div className="flex items-center justify-between mb-4 md:mb-6">
         <Link href="/items" className="text-sm text-gray-500 hover:text-gray-700">
           ← Back to Wardrobe
         </Link>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <Link
             href={`/items/${id}/edit`}
-            className="flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <Edit className="h-4 w-4" />
-            Edit
+            <span className="hidden sm:inline">Edit</span>
           </Link>
           <DeleteItemButton itemId={id} />
         </div>
