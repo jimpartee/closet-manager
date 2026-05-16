@@ -1,10 +1,11 @@
+import { BASE_URL } from '@/lib/base-url'
 import { notFound } from 'next/navigation'
 import { Item, Location, Bag } from '@/lib/types'
 import { ItemForm } from '../../item-form'
 
 async function getItem(id: string): Promise<Item | null> {
   try {
-    const res = await fetch(`http://localhost:3000/api/items/${id}`, { cache: 'no-store' })
+    const res = await fetch(`${BASE_URL}/api/items/${id}`, { cache: 'no-store' })
     if (!res.ok) return null
     return res.json()
   } catch {
@@ -14,7 +15,7 @@ async function getItem(id: string): Promise<Item | null> {
 
 async function getLocationsAndBags(): Promise<{ locations: Location[]; bags: Bag[] }> {
   try {
-    const res = await fetch('http://localhost:3000/api/locations', { cache: 'no-store' })
+    const res = await fetch(BASE_URL + '/api/locations', { cache: 'no-store' })
     if (!res.ok) return { locations: [], bags: [] }
     return res.json()
   } catch {

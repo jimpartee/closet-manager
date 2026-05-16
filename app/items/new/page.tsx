@@ -1,8 +1,9 @@
+import { BASE_URL } from '@/lib/base-url'
 import { ItemForm } from '../item-form'
 
 async function getLocationsAndBags() {
   try {
-    const res = await fetch('http://localhost:3000/api/locations', { cache: 'no-store' })
+    const res = await fetch(BASE_URL + '/api/locations', { cache: 'no-store' })
     if (!res.ok) return { locations: [], bags: [] }
     return res.json()
   } catch {

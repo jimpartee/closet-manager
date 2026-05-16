@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/lib/base-url'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
@@ -18,7 +19,7 @@ import { format } from 'date-fns'
 
 async function getItem(id: string): Promise<Item | null> {
   try {
-    const res = await fetch(`http://localhost:3000/api/items/${id}`, { cache: 'no-store' })
+    const res = await fetch(`${BASE_URL}/api/items/${id}`, { cache: 'no-store' })
     if (!res.ok) return null
     return res.json()
   } catch {
@@ -29,7 +30,7 @@ async function getItem(id: string): Promise<Item | null> {
 async function getPriceAlerts(itemId: string): Promise<PriceAlert[]> {
   try {
     const res = await fetch(
-      `http://localhost:3000/api/price-alerts?item_id=${itemId}`,
+      `${BASE_URL}/api/price-alerts?item_id=${itemId}`,
       { cache: 'no-store' }
     )
     if (!res.ok) return []

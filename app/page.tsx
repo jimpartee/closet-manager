@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/lib/base-url'
 import Link from 'next/link'
 import { Plus, Mail, Package, Heart, DollarSign, AlertTriangle, Shirt } from 'lucide-react'
 import { Item } from '@/lib/types'
@@ -12,7 +13,7 @@ async function getDashboardData() {
   }
 
   try {
-    const res = await fetch('http://localhost:3000/api/items', {
+    const res = await fetch(BASE_URL + '/api/items', {
       cache: 'no-store',
     })
     if (!res.ok) return { missingEnvVars: false, items: [], error: 'Failed to fetch items' }

@@ -1,9 +1,10 @@
+import { BASE_URL } from '@/lib/base-url'
 import { Item } from '@/lib/types'
 import { NewDonationForm } from './new-donation-form'
 
 async function getActiveItems(): Promise<Item[]> {
   try {
-    const res = await fetch('http://localhost:3000/api/items', { cache: 'no-store' })
+    const res = await fetch(BASE_URL + '/api/items', { cache: 'no-store' })
     if (!res.ok) return []
     const items: Item[] = await res.json()
     return items.filter((i) => i.status === 'active')

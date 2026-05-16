@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/lib/base-url'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { Item } from '@/lib/types'
@@ -6,7 +7,7 @@ import { FillPhotosButton } from './fill-photos-button'
 
 async function getItems(): Promise<Item[]> {
   try {
-    const res = await fetch('http://localhost:3000/api/items', { cache: 'no-store' })
+    const res = await fetch(BASE_URL + '/api/items', { cache: 'no-store' })
     if (!res.ok) return []
     return res.json()
   } catch {

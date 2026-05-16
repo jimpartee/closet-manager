@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/lib/base-url'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Calendar, Package, DollarSign, ArrowLeft } from 'lucide-react'
@@ -8,7 +9,7 @@ import { DeleteDonationButton } from './delete-donation-button'
 
 async function getDonation(id: string): Promise<Donation | null> {
   try {
-    const res = await fetch(`http://localhost:3000/api/donations/${id}`, { cache: 'no-store' })
+    const res = await fetch(`${BASE_URL}/api/donations/${id}`, { cache: 'no-store' })
     if (!res.ok) return null
     return res.json()
   } catch {

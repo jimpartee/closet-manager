@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/lib/base-url'
 import Link from 'next/link'
 import { Plus, Heart, Calendar, Package, DollarSign } from 'lucide-react'
 import { Donation } from '@/lib/types'
@@ -5,7 +6,7 @@ import { format } from 'date-fns'
 
 async function getDonations(): Promise<Donation[]> {
   try {
-    const res = await fetch('http://localhost:3000/api/donations', { cache: 'no-store' })
+    const res = await fetch(BASE_URL + '/api/donations', { cache: 'no-store' })
     if (!res.ok) return []
     return res.json()
   } catch {

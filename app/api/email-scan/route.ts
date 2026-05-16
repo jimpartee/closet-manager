@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { google } from 'googleapis'
+import { BASE_URL } from '@/lib/base-url'
 
 export async function GET() {
   const clientId = process.env.GOOGLE_CLIENT_ID
@@ -15,7 +16,7 @@ export async function GET() {
   const oauth2Client = new google.auth.OAuth2(
     clientId,
     clientSecret,
-    'http://localhost:3000/api/email-scan/callback'
+    BASE_URL + '/api/email-scan/callback'
   )
 
   const authUrl = oauth2Client.generateAuthUrl({

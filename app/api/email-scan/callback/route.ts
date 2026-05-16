@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { google } from 'googleapis'
 import Anthropic from '@anthropic-ai/sdk'
+import { BASE_URL } from '@/lib/base-url'
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -85,7 +86,7 @@ export async function GET(req: Request) {
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    'http://localhost:3000/api/email-scan/callback'
+    BASE_URL + '/api/email-scan/callback'
   )
 
   try {
@@ -185,12 +186,12 @@ export async function GET(req: Request) {
     // Encode items as base64 and redirect to review page
     const encoded = Buffer.from(JSON.stringify(foundItems)).toString('base64url')
     return NextResponse.redirect(
-      `http://localhost:3000/email-scan?items=${encoded}`
+      `${BASE_URL}/email-scan?items=${encoded}`
     )
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error'
     return NextResponse.redirect(
-      `http://localhost:3000/email-scan?error=${encodeURIComponent(msg)}`
+      `${BASE_URL}/email-scan?error=${encodeURIComponent(msg)}`
     )
   }
 }

@@ -1,11 +1,12 @@
+import { BASE_URL } from '@/lib/base-url'
 import { Location, Bag, Item } from '@/lib/types'
 import { LocationsClient } from './locations-client'
 
 async function getData() {
   try {
     const [locRes, itemsRes] = await Promise.all([
-      fetch('http://localhost:3000/api/locations', { cache: 'no-store' }),
-      fetch('http://localhost:3000/api/items', { cache: 'no-store' }),
+      fetch(BASE_URL + '/api/locations', { cache: 'no-store' }),
+      fetch(BASE_URL + '/api/items', { cache: 'no-store' }),
     ])
     const { locations, bags } = locRes.ok ? await locRes.json() : { locations: [], bags: [] }
     const items: Item[] = itemsRes.ok ? await itemsRes.json() : []
