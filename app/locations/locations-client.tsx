@@ -13,22 +13,24 @@ interface LocationsClientProps {
   items: Item[]
 }
 
-function PhotoUploadButton({
-  onUpload,
-  uploading,
-}: {
-  onUpload: (url: string) => void
-  uploading: boolean
-}) {
+function PhotoUploadButton({ onUpload }: { onUpload: (url: string) => void }) {
   const inputRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
 
   const handleFile = async (file: File) => {
-    const formData = new FormData()
-    formData.append('file', file)
-    const res = await fetch('/api/upload', { method: 'POST', body: formData })
-    if (!res.ok) throw new Error('Upload failed')
-    const { url } = await res.json()
-    onUpload(url)
+    setUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      const res = await fetch('/api/upload', { method: 'POST', body: formData })
+      if (!res.ok) throw new Error('Upload failed')
+      const { url } = await res.json()
+      onUpload(url)
+    } catch {
+      toast.error('Failed to upload photo')
+    } finally {
+      setUploading(false)
+    }
   }
 
   return (
@@ -68,13 +70,7 @@ function AddDialog({
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [imageUrl, setImageUrl] = useState('')
-  const [uploading, setUploading] = useState(false)
   const [saving, setSaving] = useState(false)
-
-  const handleUpload = async (url: string) => {
-    setImageUrl(url)
-    setUploading(false)
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -123,13 +119,7 @@ function AddDialog({
                 </button>
               </div>
             ) : (
-              <PhotoUploadButton
-                uploading={uploading}
-                onUpload={(url) => {
-                  setUploading(false)
-                  handleUpload(url)
-                }}
-              />
+              <PhotoUploadButton onUpload={(url) => setImageUrl(url)} />
             )}
           </div>
 
@@ -189,7 +179,6 @@ function PhotoDialog({
   onSuccess: () => void
 }) {
   const [imageUrl, setImageUrl] = useState(currentUrl || '')
-  const [uploading, setUploading] = useState(false)
   const [saving, setSaving] = useState(false)
 
   const handleSave = async () => {
@@ -233,13 +222,7 @@ function PhotoDialog({
               <p className="text-sm">No photo</p>
             </div>
           )}
-          <PhotoUploadButton
-            uploading={uploading}
-            onUpload={(url) => {
-              setUploading(false)
-              setImageUrl(url)
-            }}
-          />
+          <PhotoUploadButton onUpload={(url) => setImageUrl(url)} />
           <div className="flex gap-3">
             <button
               type="button"
