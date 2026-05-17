@@ -10,6 +10,34 @@ import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { CATEGORIES, GENDERS, SIZES, Location, Bag, Item } from '@/lib/types'
 import { toast } from 'sonner'
 
+async function compressImage(file: File | Blob, maxWidth = 1200, quality = 0.82): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl)
+      let { width, height } = img
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width)
+        width = maxWidth
+      }
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return reject(new Error('Canvas not supported'))
+      ctx.drawImage(img, 0, 0, width, height)
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new Error('Compression failed'))),
+        'image/jpeg',
+        quality,
+      )
+    }
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('Failed to load image')) }
+    img.src = objectUrl
+  })
+}
+
 const itemSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   brand: z.string().optional(),
@@ -70,14 +98,18 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
 
     setUploading(true)
     try {
+      const compressed = await compressImage(file)
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', compressed, 'photo.jpg')
       const res = await fetch('/api/upload', { method: 'POST', body: formData })
-      if (!res.ok) throw new Error('Upload failed')
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error || `Upload failed (${res.status})`)
+      }
       const { url } = await res.json()
       setImageUrl(url)
-    } catch {
-      toast.error('Failed to upload image')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to upload image')
     } finally {
       setUploading(false)
     }
