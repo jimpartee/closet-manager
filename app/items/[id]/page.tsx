@@ -15,6 +15,7 @@ import { Item, PriceAlert } from '@/lib/types'
 import { DeleteItemButton } from './delete-item-button'
 import { PriceAlertSection } from './price-alert-section'
 import { FetchPhotoButton } from './fetch-photo-button'
+import { EbayListingButton } from './ebay-listing-button'
 import { format } from 'date-fns'
 
 async function getItem(id: string): Promise<Item | null> {
@@ -57,6 +58,7 @@ export default async function ItemDetailPage({
           ← Back to Wardrobe
         </Link>
         <div className="flex gap-2">
+          <EbayListingButton itemId={id} />
           <Link
             href={`/items/${id}/edit`}
             className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
