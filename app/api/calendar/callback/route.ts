@@ -72,8 +72,12 @@ export async function GET(req: Request) {
       )
     }
 
-    // Sync upcoming events for this account
-    await syncEventsForAccount(oauth2Client, account.id)
+    // Sync events — non-fatal, account is saved regardless
+    try {
+      await syncEventsForAccount(oauth2Client, account.id)
+    } catch {
+      // Sync failure (e.g. Calendar API not enabled) doesn't block account save
+    }
 
     return NextResponse.redirect(`${origin}/calendar?connected=1`)
   } catch (err) {

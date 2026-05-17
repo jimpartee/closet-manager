@@ -39,6 +39,8 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
         eventsRes.json(),
         bagsRes.json(),
       ])
+      if (!accountsRes.ok) toast.error(`Accounts error: ${accountsData?.error ?? accountsRes.status}`)
+      if (!eventsRes.ok) toast.error(`Events error: ${eventsData?.error ?? eventsRes.status}`)
       setAccounts(Array.isArray(accountsData) ? accountsData : [])
       setEvents(Array.isArray(eventsData) ? eventsData : [])
       setBags(Array.isArray(bagsData) ? bagsData : [])
