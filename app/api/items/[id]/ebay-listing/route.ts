@@ -5,10 +5,11 @@ import { supabaseAdmin } from '@/lib/supabase'
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
+  const { condition } = await req.json().catch(() => ({}))
 
   const { data: item, error } = await supabaseAdmin
     .from('items')
@@ -48,12 +49,12 @@ export async function POST(
     text: `Generate an eBay listing for this clothing item based on the details below${item.image_url ? ' and the photo' : ''}.
 
 ${details}
+${condition ? `eBay condition (already selected by seller): ${condition}` : ''}
 
 Return ONLY a JSON object with these fields:
 - title: string (max 80 chars, keyword-rich eBay title, no special characters like !, *, $)
-- condition: one of "New with tags" | "New without tags" | "Like New" | "Very Good" | "Good" | "Acceptable"
-- suggested_price: number (realistic resale price in USD — typically 20-50% of retail for used, 60-80% for like new)
-- description: string (plain text, 3-4 paragraphs, include all known details, condition notes, size info, mention smoke-free home)`,
+- suggested_price: number (realistic resale price in USD based on condition — new items 60-80% of retail, pre-owned 20-50%)
+- description: string (plain text, 3-4 paragraphs; include all known details, reference the condition "${condition || 'as described'}", size info, mention smoke-free home)`,
   })
 
   const response = await anthropic.messages.create({
