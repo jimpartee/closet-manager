@@ -20,17 +20,17 @@ export default async function ItemsPage() {
   const missingPhotos = items.filter(i => !i.image_url).length
 
   return (
-    <div className="p-4 md:p-6">
-      <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between sm:mb-6">
+    <div className="p-4 md:p-8">
+      <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-start sm:justify-between sm:mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Wardrobe</h1>
-          <p className="text-sm text-gray-500 mt-1">{items.length} items total</p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Wardrobe</h1>
+          <p className="text-sm text-pink-400 mt-1 font-medium">{items.length} items in your collection</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <FillPhotosButton missingCount={missingPhotos} />
           <Link
             href="/items/new"
-            className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-pink-500 to-pink-600 px-4 py-2.5 text-sm font-semibold text-white hover:from-pink-600 hover:to-pink-700 transition-all shadow-sm shadow-pink-200"
           >
             <Plus className="h-4 w-4" />
             Add Item

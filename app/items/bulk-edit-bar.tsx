@@ -35,7 +35,7 @@ export function BulkEditBar({ selectedIds, onCancel, onApplied }: BulkEditBarPro
   }, [])
 
   const selectClass =
-    'rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500'
+    'rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500'
 
   const handleApply = async () => {
     const updates: Record<string, string | null> = {}
@@ -146,7 +146,7 @@ export function BulkEditBar({ selectedIds, onCancel, onApplied }: BulkEditBarPro
               type="button"
               onClick={handleApply}
               disabled={saving || selectedIds.length === 0}
-              className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-medium text-white hover:bg-pink-600 transition-colors disabled:opacity-50"
             >
               {saving && <Loader2 className="h-4 w-4 animate-spin" />}
               Apply to {selectedIds.length} item{selectedIds.length !== 1 ? 's' : ''}

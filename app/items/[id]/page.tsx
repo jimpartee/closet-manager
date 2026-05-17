@@ -96,7 +96,7 @@ export default async function ItemDetailPage({
         <div className="space-y-5">
           <div>
             {item.brand && (
-              <p className="text-sm font-medium text-violet-600 uppercase tracking-wide mb-1">
+              <p className="text-sm font-medium text-pink-600 uppercase tracking-wide mb-1">
                 {item.brand}
               </p>
             )}
@@ -114,7 +114,7 @@ export default async function ItemDetailPage({
                 </span>
               )}
               {item.color && (
-                <span className="inline-flex items-center rounded-full bg-violet-50 px-3 py-1 text-sm text-violet-700">
+                <span className="inline-flex items-center rounded-full bg-pink-50 px-3 py-1 text-sm text-pink-700">
                   {item.color}
                 </span>
               )}
@@ -177,7 +177,7 @@ export default async function ItemDetailPage({
                   href={item.product_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-violet-600 hover:text-violet-700 truncate max-w-xs"
+                  className="text-sm text-pink-600 hover:text-pink-700 truncate max-w-xs"
                 >
                   View product
                 </a>

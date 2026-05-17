@@ -32,7 +32,7 @@ export default async function DonationsPage() {
         </div>
         <Link
           href="/donations/new"
-          className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors"
+          className="flex items-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-medium text-white hover:bg-pink-600 transition-colors"
         >
           <Plus className="h-4 w-4" />
           New Donation
@@ -77,7 +77,7 @@ export default async function DonationsPage() {
           <p className="text-gray-500">No donations recorded yet.</p>
           <Link
             href="/donations/new"
-            className="mt-4 inline-flex items-center gap-2 text-sm text-violet-600 hover:text-violet-700"
+            className="mt-4 inline-flex items-center gap-2 text-sm text-pink-600 hover:text-pink-700"
           >
             <Plus className="h-4 w-4" />
             Record your first donation
