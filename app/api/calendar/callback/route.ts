@@ -49,32 +49,55 @@ export async function GET(req: Request) {
       return NextResponse.redirect(`${origin}/calendar?error=no_email`)
     }
 
-    // Upsert calendar account (replace if same email already connected)
-    const { data: account, error: upsertError } = await supabaseAdmin
+    // Save or update the calendar account
+    const { data: existing } = await supabaseAdmin
       .from('calendar_accounts')
-      .upsert(
-        {
+      .select('id')
+      .eq('email', email)
+      .maybeSingle()
+
+    let accountId: string
+    if (existing) {
+      const { error: updateError } = await supabaseAdmin
+        .from('calendar_accounts')
+        .update({
+          access_token: tokens.access_token!,
+          refresh_token: tokens.refresh_token ?? null,
+          token_expiry: tokens.expiry_date
+            ? new Date(tokens.expiry_date).toISOString()
+            : null,
+        })
+        .eq('id', existing.id)
+      if (updateError) {
+        return NextResponse.redirect(
+          `${origin}/calendar?error=${encodeURIComponent(updateError.message)}`
+        )
+      }
+      accountId = existing.id
+    } else {
+      const { data: inserted, error: insertError } = await supabaseAdmin
+        .from('calendar_accounts')
+        .insert({
           email,
           access_token: tokens.access_token!,
           refresh_token: tokens.refresh_token ?? null,
           token_expiry: tokens.expiry_date
             ? new Date(tokens.expiry_date).toISOString()
             : null,
-        },
-        { onConflict: 'email' }
-      )
-      .select()
-      .single()
-
-    if (upsertError || !account) {
-      return NextResponse.redirect(
-        `${origin}/calendar?error=${encodeURIComponent(upsertError?.message ?? 'db_error')}`
-      )
+        })
+        .select('id')
+        .single()
+      if (insertError || !inserted) {
+        return NextResponse.redirect(
+          `${origin}/calendar?error=${encodeURIComponent(insertError?.message ?? 'db_error')}`
+        )
+      }
+      accountId = inserted.id
     }
 
     // Sync events — non-fatal, account is saved regardless
     try {
-      await syncEventsForAccount(oauth2Client, account.id)
+      await syncEventsForAccount(oauth2Client, accountId)
     } catch {
       // Sync failure (e.g. Calendar API not enabled) doesn't block account save
     }
@@ -124,25 +147,36 @@ export async function syncEventsForAccount(
         const startTime = event.start?.dateTime ?? event.start?.date
         if (!startTime) continue
 
-        await supabaseAdmin.from('calendar_events').upsert(
-          {
-            calendar_account_id: accountId,
-            google_event_id: event.id,
-            title: event.summary ?? null,
-            description: event.description ?? null,
-            start_time: new Date(startTime).toISOString(),
-            end_time: event.end?.dateTime
-              ? new Date(event.end.dateTime).toISOString()
-              : event.end?.date
-              ? new Date(event.end.date).toISOString()
-              : null,
-            location: event.location ?? null,
-            calendar_id: cal.id,
-            is_all_day: isAllDay,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'calendar_account_id,google_event_id' }
-        )
+        const eventPayload = {
+          calendar_account_id: accountId,
+          google_event_id: event.id,
+          title: event.summary ?? null,
+          description: event.description ?? null,
+          start_time: new Date(startTime).toISOString(),
+          end_time: event.end?.dateTime
+            ? new Date(event.end.dateTime).toISOString()
+            : event.end?.date
+            ? new Date(event.end.date).toISOString()
+            : null,
+          location: event.location ?? null,
+          calendar_id: cal.id,
+          is_all_day: isAllDay,
+          updated_at: new Date().toISOString(),
+        }
+        const { data: existingEvent } = await supabaseAdmin
+          .from('calendar_events')
+          .select('id')
+          .eq('calendar_account_id', accountId)
+          .eq('google_event_id', event.id)
+          .maybeSingle()
+        if (existingEvent) {
+          await supabaseAdmin
+            .from('calendar_events')
+            .update(eventPayload)
+            .eq('id', existingEvent.id)
+        } else {
+          await supabaseAdmin.from('calendar_events').insert(eventPayload)
+        }
       }
     } catch {
       // Skip calendars we can't read
