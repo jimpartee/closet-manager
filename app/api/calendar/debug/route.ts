@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 
 export async function GET(req: Request) {
-  const headersList = headers()
+  const headersList = await headers()
   const forwardedProto = headersList.get('x-forwarded-proto')
   const forwardedHost = headersList.get('x-forwarded-host')
 

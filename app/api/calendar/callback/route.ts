@@ -3,8 +3,8 @@ import { google } from 'googleapis'
 import { headers } from 'next/headers'
 import { supabaseAdmin } from '@/lib/supabase'
 
-function getOrigin(req: Request): string {
-  const headersList = headers()
+async function getOrigin(req: Request): Promise<string> {
+  const headersList = await headers()
   const forwardedProto = headersList.get('x-forwarded-proto')
   const forwardedHost = headersList.get('x-forwarded-host')
   if (forwardedProto && forwardedHost) {
@@ -15,7 +15,7 @@ function getOrigin(req: Request): string {
 }
 
 export async function GET(req: Request) {
-  const origin = getOrigin(req)
+  const origin = await getOrigin(req)
   const { searchParams } = new URL(req.url)
   const code = searchParams.get('code')
   const error = searchParams.get('error')
