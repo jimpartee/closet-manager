@@ -9,12 +9,13 @@ import {
   Heart,
   Mail,
   Sparkles,
+  CalendarDays,
 } from 'lucide-react'
 
 const navItems = [
   { href: '/', label: 'Home', icon: LayoutDashboard },
   { href: '/items', label: 'Wardrobe', icon: Shirt },
-  { href: '/locations', label: 'Locations', icon: MapPin },
+  { href: '/calendar', label: 'Calendar', icon: CalendarDays },
   { href: '/outfits', label: 'Outfits', icon: Sparkles },
   { href: '/donations', label: 'Donate', icon: Heart },
   { href: '/email-scan', label: 'Email', icon: Mail },
