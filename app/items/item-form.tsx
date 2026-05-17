@@ -23,6 +23,7 @@ const itemSchema = z.object({
   notes: z.string().optional(),
   location_id: z.string().optional(),
   bag_id: z.string().optional(),
+  cleanliness: z.enum(['clean', 'dirty']).optional(),
 })
 
 type ItemFormData = z.infer<typeof itemSchema>
@@ -59,6 +60,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
       notes: defaultValues?.notes || '',
       location_id: defaultValues?.location_id || '',
       bag_id: defaultValues?.bag_id || '',
+      cleanliness: defaultValues?.cleanliness || 'clean',
     },
   })
 
@@ -96,6 +98,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
         location_id: data.location_id || null,
         bag_id: data.bag_id || null,
         image_url: imageUrl || null,
+        cleanliness: data.cleanliness || 'clean',
         source: defaultValues?.source || 'manual',
       }
 
@@ -325,6 +328,18 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
             ))}
           </select>
         </div>
+      </div>
+
+      {/* Cleanliness */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Cleanliness</label>
+        <select
+          {...register('cleanliness')}
+          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+        >
+          <option value="clean">Clean</option>
+          <option value="dirty">Dirty</option>
+        </select>
       </div>
 
       {/* Notes */}

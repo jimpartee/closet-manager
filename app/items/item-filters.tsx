@@ -16,7 +16,8 @@ export function ItemFilters({ items }: ItemFiltersProps) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('')
   const [gender, setGender] = useState('')
-  const [status, setStatus] = useState<'all' | 'active' | 'donated'>('all')
+  const [status, setStatus] = useState<'all' | 'active' | 'donated' | 'lost'>('all')
+  const [cleanliness, setCleanliness] = useState<'all' | 'clean' | 'dirty'>('all')
   const [bulkMode, setBulkMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
@@ -29,9 +30,10 @@ export function ItemFilters({ items }: ItemFiltersProps) {
       const matchesCategory = !category || item.category === category
       const matchesGender = !gender || item.gender === gender
       const matchesStatus = status === 'all' || item.status === status
-      return matchesSearch && matchesCategory && matchesGender && matchesStatus
+      const matchesCleanliness = cleanliness === 'all' || item.cleanliness === cleanliness
+      return matchesSearch && matchesCategory && matchesGender && matchesStatus && matchesCleanliness
     })
-  }, [items, search, category, gender, status])
+  }, [items, search, category, gender, status, cleanliness])
 
   const toggleItem = useCallback((id: string) => {
     setSelectedIds((prev) => {
@@ -105,12 +107,23 @@ export function ItemFilters({ items }: ItemFiltersProps) {
 
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value as 'all' | 'active' | 'donated')}
+          onChange={(e) => setStatus(e.target.value as 'all' | 'active' | 'donated' | 'lost')}
           className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
         >
           <option value="all">All Status</option>
           <option value="active">Active</option>
           <option value="donated">Donated</option>
+          <option value="lost">Lost</option>
+        </select>
+
+        <select
+          value={cleanliness}
+          onChange={(e) => setCleanliness(e.target.value as 'all' | 'clean' | 'dirty')}
+          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+        >
+          <option value="all">All Cleanliness</option>
+          <option value="clean">Clean</option>
+          <option value="dirty">Dirty</option>
         </select>
 
         <button

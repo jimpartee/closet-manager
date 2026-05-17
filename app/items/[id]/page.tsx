@@ -127,11 +127,24 @@ export default async function ItemDetailPage({
                 className={`inline-flex items-center rounded-full px-3 py-1 text-sm ${
                   item.status === 'donated'
                     ? 'bg-amber-50 text-amber-700'
+                    : item.status === 'lost'
+                    ? 'bg-gray-100 text-gray-600'
                     : 'bg-green-50 text-green-700'
                 }`}
               >
-                {item.status === 'donated' ? 'Donated' : 'Active'}
+                {item.status === 'donated' ? 'Donated' : item.status === 'lost' ? 'Lost' : 'Active'}
               </span>
+              {item.cleanliness && (
+                <span
+                  className={`inline-flex items-center rounded-full px-3 py-1 text-sm ${
+                    item.cleanliness === 'dirty'
+                      ? 'bg-orange-50 text-orange-700'
+                      : 'bg-sky-50 text-sky-700'
+                  }`}
+                >
+                  {item.cleanliness === 'dirty' ? 'Dirty' : 'Clean'}
+                </span>
+              )}
               <span
                 className={`inline-flex items-center rounded-full px-3 py-1 text-xs ${
                   item.source === 'email_scan'
