@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
 import { google } from 'googleapis'
-import { BASE_URL } from '@/lib/base-url'
 
-export async function GET() {
+export async function GET(req: Request) {
   const clientId = process.env.GOOGLE_CLIENT_ID
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET
 
@@ -13,11 +12,10 @@ export async function GET() {
     )
   }
 
-  const oauth2Client = new google.auth.OAuth2(
-    clientId,
-    clientSecret,
-    BASE_URL + '/api/calendar/callback'
-  )
+  const { origin } = new URL(req.url)
+  const redirectUri = `${origin}/api/calendar/callback`
+
+  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri)
 
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',

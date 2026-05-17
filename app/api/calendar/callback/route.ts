@@ -1,27 +1,26 @@
 import { NextResponse } from 'next/server'
 import { google } from 'googleapis'
-import { BASE_URL } from '@/lib/base-url'
 import { supabaseAdmin } from '@/lib/supabase'
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
+  const { searchParams, origin } = new URL(req.url)
   const code = searchParams.get('code')
   const error = searchParams.get('error')
 
   if (error) {
     return NextResponse.redirect(
-      `${BASE_URL}/calendar?error=${encodeURIComponent(error)}`
+      `${origin}/calendar?error=${encodeURIComponent(error)}`
     )
   }
 
   if (!code) {
-    return NextResponse.redirect(`${BASE_URL}/calendar?error=no_code`)
+    return NextResponse.redirect(`${origin}/calendar?error=no_code`)
   }
 
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    BASE_URL + '/api/calendar/callback'
+    `${origin}/api/calendar/callback`
   )
 
   try {
@@ -34,7 +33,7 @@ export async function GET(req: Request) {
     const email = userInfo.data.email
 
     if (!email) {
-      return NextResponse.redirect(`${BASE_URL}/calendar?error=no_email`)
+      return NextResponse.redirect(`${origin}/calendar?error=no_email`)
     }
 
     // Upsert calendar account (replace if same email already connected)
@@ -56,18 +55,18 @@ export async function GET(req: Request) {
 
     if (upsertError || !account) {
       return NextResponse.redirect(
-        `${BASE_URL}/calendar?error=${encodeURIComponent(upsertError?.message ?? 'db_error')}`
+        `${origin}/calendar?error=${encodeURIComponent(upsertError?.message ?? 'db_error')}`
       )
     }
 
     // Sync upcoming events for this account
     await syncEventsForAccount(oauth2Client, account.id)
 
-    return NextResponse.redirect(`${BASE_URL}/calendar?connected=1`)
+    return NextResponse.redirect(`${origin}/calendar?connected=1`)
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error'
     return NextResponse.redirect(
-      `${BASE_URL}/calendar?error=${encodeURIComponent(msg)}`
+      `${origin}/calendar?error=${encodeURIComponent(msg)}`
     )
   }
 }
