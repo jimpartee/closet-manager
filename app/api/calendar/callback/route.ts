@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server'
 import { google } from 'googleapis'
+import { headers } from 'next/headers'
 import { supabaseAdmin } from '@/lib/supabase'
 
+function getOrigin(req: Request): string {
+  const headersList = headers()
+  const forwardedProto = headersList.get('x-forwarded-proto')
+  const forwardedHost = headersList.get('x-forwarded-host')
+  if (forwardedProto && forwardedHost) {
+    const proto = forwardedProto.split(',')[0].trim()
+    return `${proto}://${forwardedHost}`
+  }
+  return new URL(req.url).origin
+}
+
 export async function GET(req: Request) {
-  const { searchParams, origin } = new URL(req.url)
+  const origin = getOrigin(req)
+  const { searchParams } = new URL(req.url)
   const code = searchParams.get('code')
   const error = searchParams.get('error')
 
