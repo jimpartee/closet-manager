@@ -20,10 +20,10 @@ export default async function LocationsPage() {
   const { locations, bags, items } = await getData()
 
   return (
-    <div className="p-4 md:p-6 max-w-5xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">Locations</h1>
-        <p className="text-sm text-gray-500 mt-1">Manage where your items are stored</p>
+    <div className="p-4 md:p-8 max-w-5xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Locations</h1>
+        <p className="text-sm text-pink-400 mt-1 font-medium">Where everything lives</p>
       </div>
       <LocationsClient locations={locations} bags={bags} items={items} />
     </div>

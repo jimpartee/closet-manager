@@ -54,7 +54,11 @@ Return ONLY valid JSON, no markdown.`
   }
 
   try {
-    const parsed = JSON.parse(textContent.text)
+    const raw = textContent.text
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```\s*$/i, '')
+      .trim()
+    const parsed = JSON.parse(raw)
 
     // Enrich owned_items with item details
     const itemMap = new Map((items as Item[]).map((i) => [i.id, i]))
@@ -73,6 +77,9 @@ Return ONLY valid JSON, no markdown.`
 
     return NextResponse.json({ outfits: enrichedOutfits })
   } catch {
-    return NextResponse.json({ error: 'Failed to parse AI response' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Failed to parse AI response', raw: textContent.text },
+      { status: 500 },
+    )
   }
 }
