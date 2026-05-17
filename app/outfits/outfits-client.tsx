@@ -41,7 +41,7 @@ function OutfitCard({ outfit }: { outfit: Outfit }) {
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-gray-900">{outfit.name}</h3>
-        <span className="inline-flex items-center rounded-full bg-violet-50 px-2.5 py-0.5 text-xs font-medium text-violet-700 mt-1">
+        <span className="inline-flex items-center rounded-full bg-pink-50 px-2.5 py-0.5 text-xs font-medium text-pink-700 mt-1">
           {outfit.occasion}
         </span>
       </div>
@@ -57,7 +57,7 @@ function OutfitCard({ outfit }: { outfit: Outfit }) {
               <a
                 key={item.id}
                 href={`/items/${item.id}`}
-                className="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 text-sm hover:border-violet-200 hover:bg-violet-50 transition-colors"
+                className="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 text-sm hover:border-pink-200 hover:bg-pink-50 transition-colors"
               >
                 <div className="h-7 w-7 rounded bg-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
                   {item.image_url ? (
@@ -105,7 +105,7 @@ function OutfitCard({ outfit }: { outfit: Outfit }) {
                   href={`https://www.google.com/search?tbm=shop&q=${encodeURIComponent(piece.search_query)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-violet-600 hover:text-violet-700 flex-shrink-0 ml-3"
+                  className="flex items-center gap-1 text-xs text-pink-600 hover:text-pink-700 flex-shrink-0 ml-3"
                 >
                   Shop
                   <ExternalLink className="h-3 w-3" />
@@ -175,13 +175,13 @@ export function OutfitsClient() {
             value={context}
             onChange={(e) => setContext(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && generate()}
-            className="flex-1 rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="flex-1 rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
             placeholder="e.g. First date at a nice restaurant..."
           />
           <button
             onClick={() => generate()}
             disabled={loading || !context.trim()}
-            className="flex items-center gap-2 rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-violet-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg bg-pink-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-pink-600 transition-colors disabled:opacity-50"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -201,7 +201,7 @@ export function OutfitsClient() {
               disabled={loading}
               className={`rounded-full px-3 py-1.5 text-sm transition-colors disabled:opacity-50 ${
                 context === ctx
-                  ? 'bg-violet-100 text-violet-700 border border-violet-300'
+                  ? 'bg-violet-100 text-pink-700 border border-pink-300'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-transparent'
               }`}
             >

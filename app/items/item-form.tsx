@@ -144,7 +144,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
             {...getRootProps()}
             className={`flex flex-col items-center justify-center w-full h-40 rounded-lg border-2 border-dashed cursor-pointer transition-colors ${
               isDragActive
-                ? 'border-violet-400 bg-violet-50'
+                ? 'border-pink-400 bg-pink-50'
                 : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
             }`}
           >
@@ -154,7 +154,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
             ) : (
               <>
                 {isDragActive ? (
-                  <Upload className="h-6 w-6 text-violet-400 mb-2" />
+                  <Upload className="h-6 w-6 text-pink-400 mb-2" />
                 ) : (
                   <ImageIcon className="h-6 w-6 text-gray-400 mb-2" />
                 )}
@@ -174,7 +174,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
         </label>
         <input
           {...register('name')}
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
           placeholder="e.g. Black Blazer"
         />
         {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
@@ -186,7 +186,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
           <label className="block text-sm font-medium text-gray-700 mb-1">Brand</label>
           <input
             {...register('brand')}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
             placeholder="e.g. Zara"
           />
         </div>
@@ -196,7 +196,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
           <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
           <select
             {...register('category')}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
           >
             <option value="">Select category</option>
             {CATEGORIES.map((c) => (
@@ -213,7 +213,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
         <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
         <select
           {...register('gender')}
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
         >
           <option value="">Select gender</option>
           {GENDERS.map((g) => (
@@ -230,7 +230,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
           <label className="block text-sm font-medium text-gray-700 mb-1">Color</label>
           <input
             {...register('color')}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
             placeholder="e.g. Black"
           />
         </div>
@@ -240,7 +240,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
           <label className="block text-sm font-medium text-gray-700 mb-1">Size</label>
           <select
             {...register('size')}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
           >
             <option value="">Select size</option>
             {SIZES.map((s) => (
@@ -262,7 +262,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
               {...register('purchase_price')}
               type="number"
               step="0.01"
-              className="w-full rounded-lg border border-gray-200 pl-7 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full rounded-lg border border-gray-200 pl-7 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
               placeholder="0.00"
             />
           </div>
@@ -274,7 +274,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
           <input
             {...register('purchase_date')}
             type="date"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
         </div>
       </div>
@@ -285,7 +285,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
         <input
           {...register('product_url')}
           type="url"
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
           placeholder="https://..."
         />
         {errors.product_url && (
@@ -299,7 +299,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
           <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
           <select
             {...register('location_id')}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
           >
             <option value="">None</option>
             {locations.map((loc) => (
@@ -315,7 +315,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
           <label className="block text-sm font-medium text-gray-700 mb-1">Bag</label>
           <select
             {...register('bag_id')}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
           >
             <option value="">None</option>
             {bags.map((bag) => (
@@ -333,7 +333,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
         <textarea
           {...register('notes')}
           rows={3}
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
           placeholder="Any additional notes..."
         />
       </div>
@@ -350,7 +350,7 @@ export function ItemForm({ locations, bags, defaultValues, itemId }: ItemFormPro
         <button
           type="submit"
           disabled={saving}
-          className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-medium text-white hover:bg-pink-600 transition-colors disabled:opacity-50"
         >
           {saving && <Loader2 className="h-4 w-4 animate-spin" />}
           {itemId ? 'Save Changes' : 'Add Item'}

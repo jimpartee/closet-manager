@@ -171,7 +171,7 @@ export function EmailScanClient({ initialItems, error }: EmailScanClientProps) {
             <button
               onClick={startScan}
               disabled={scanning}
-              className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-6 py-3 text-sm font-medium text-white hover:bg-violet-700 transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-pink-500 px-6 py-3 text-sm font-medium text-white hover:bg-pink-600 transition-colors disabled:opacity-50"
             >
               {scanning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
               {scanning ? 'Connecting...' : 'Scan Gmail'}
@@ -199,7 +199,7 @@ export function EmailScanClient({ initialItems, error }: EmailScanClientProps) {
               <div className="flex gap-2">
                 <button
                   onClick={selectAll}
-                  className="text-xs text-violet-600 hover:text-violet-700"
+                  className="text-xs text-pink-600 hover:text-pink-700"
                 >
                   Select all
                 </button>
@@ -231,7 +231,7 @@ export function EmailScanClient({ initialItems, error }: EmailScanClientProps) {
               <button
                 onClick={handleImport}
                 disabled={importing || selected.size === 0}
-                className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-50"
+                className="flex items-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-medium text-white hover:bg-pink-600 disabled:opacity-50"
               >
                 {importing ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -272,14 +272,14 @@ export function EmailScanClient({ initialItems, error }: EmailScanClientProps) {
                 {items.map((item, i) => (
                   <tr
                     key={i}
-                    className={selected.has(i) ? 'bg-violet-50' : 'hover:bg-gray-50'}
+                    className={selected.has(i) ? 'bg-pink-50' : 'hover:bg-gray-50'}
                   >
                     <td className="px-4 py-3">
                       <button
                         onClick={() => toggleSelect(i)}
                         className={`h-5 w-5 rounded border-2 flex items-center justify-center ${
                           selected.has(i)
-                            ? 'border-violet-600 bg-violet-600'
+                            ? 'border-pink-600 bg-pink-500'
                             : 'border-gray-300'
                         }`}
                       >
@@ -290,28 +290,28 @@ export function EmailScanClient({ initialItems, error }: EmailScanClientProps) {
                       <input
                         value={String(item.name || '')}
                         onChange={(e) => updateItem(i, 'name', e.target.value)}
-                        className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-violet-500 rounded px-1"
+                        className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-pink-500 rounded px-1"
                       />
                     </td>
                     <td className="px-4 py-3">
                       <input
                         value={String(item.brand || '')}
                         onChange={(e) => updateItem(i, 'brand', e.target.value)}
-                        className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-violet-500 rounded px-1"
+                        className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-pink-500 rounded px-1"
                       />
                     </td>
                     <td className="px-4 py-3">
                       <input
                         value={String(item.color || '')}
                         onChange={(e) => updateItem(i, 'color', e.target.value)}
-                        className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-violet-500 rounded px-1"
+                        className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-pink-500 rounded px-1"
                       />
                     </td>
                     <td className="px-4 py-3">
                       <input
                         value={String(item.size || '')}
                         onChange={(e) => updateItem(i, 'size', e.target.value)}
-                        className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-violet-500 rounded px-1"
+                        className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-pink-500 rounded px-1"
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -319,14 +319,14 @@ export function EmailScanClient({ initialItems, error }: EmailScanClientProps) {
                         type="number"
                         value={String(item.purchase_price || '')}
                         onChange={(e) => updateItem(i, 'purchase_price', e.target.value)}
-                        className="w-20 bg-transparent focus:outline-none focus:ring-1 focus:ring-violet-500 rounded px-1"
+                        className="w-20 bg-transparent focus:outline-none focus:ring-1 focus:ring-pink-500 rounded px-1"
                       />
                     </td>
                     <td className="px-4 py-3">
                       <select
                         value={String(item.category || '')}
                         onChange={(e) => updateItem(i, 'category', e.target.value)}
-                        className="bg-transparent focus:outline-none focus:ring-1 focus:ring-violet-500 rounded text-sm"
+                        className="bg-transparent focus:outline-none focus:ring-1 focus:ring-pink-500 rounded text-sm"
                       >
                         <option value="">—</option>
                         {CATEGORIES.map((c) => (

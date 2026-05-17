@@ -68,7 +68,7 @@ export function PriceAlertSection({ itemId, productUrl, alerts: initialAlerts }:
         {!showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-1 text-xs text-violet-600 hover:text-violet-700"
+            className="flex items-center gap-1 text-xs text-pink-600 hover:text-pink-700"
           >
             <Plus className="h-3 w-3" />
             Add Alert
@@ -77,13 +77,13 @@ export function PriceAlertSection({ itemId, productUrl, alerts: initialAlerts }:
       </div>
 
       {showForm && (
-        <div className="rounded-lg border border-violet-100 bg-violet-50 p-3 mb-3 space-y-2">
+        <div className="rounded-lg border border-pink-100 bg-pink-50 p-3 mb-3 space-y-2">
           <div>
             <label className="text-xs font-medium text-gray-600">Product URL</label>
             <input
               value={alertUrl}
               onChange={(e) => setAlertUrl(e.target.value)}
-              className="mt-1 w-full rounded border border-gray-200 px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-violet-500"
+              className="mt-1 w-full rounded border border-gray-200 px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-pink-500"
               placeholder="https://..."
             />
           </div>
@@ -94,7 +94,7 @@ export function PriceAlertSection({ itemId, productUrl, alerts: initialAlerts }:
               step="0.01"
               value={targetPrice}
               onChange={(e) => setTargetPrice(e.target.value)}
-              className="mt-1 w-full rounded border border-gray-200 px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-violet-500"
+              className="mt-1 w-full rounded border border-gray-200 px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-pink-500"
               placeholder="0.00"
             />
           </div>
@@ -108,7 +108,7 @@ export function PriceAlertSection({ itemId, productUrl, alerts: initialAlerts }:
             <button
               onClick={addAlert}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-1 rounded bg-violet-600 py-1.5 text-xs text-white hover:bg-violet-700 disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-1 rounded bg-pink-500 py-1.5 text-xs text-white hover:bg-pink-600 disabled:opacity-50"
             >
               {saving && <Loader2 className="h-3 w-3 animate-spin" />}
               Set Alert
@@ -134,7 +134,7 @@ export function PriceAlertSection({ itemId, productUrl, alerts: initialAlerts }:
                   href={alert.product_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-violet-600 truncate block max-w-[200px]"
+                  className="text-xs text-pink-600 truncate block max-w-[200px]"
                 >
                   {alert.product_url}
                 </a>

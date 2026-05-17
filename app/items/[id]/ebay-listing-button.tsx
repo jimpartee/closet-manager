@@ -108,7 +108,7 @@ export function EbayListingButton({ itemId }: EbayListingButtonProps) {
             <div className="overflow-y-auto px-6 py-5 space-y-5">
               {loading && (
                 <div className="flex flex-col items-center justify-center py-16 gap-3">
-                  <Loader2 className="h-8 w-8 text-violet-500 animate-spin" />
+                  <Loader2 className="h-8 w-8 text-pink-500 animate-spin" />
                   <p className="text-sm text-gray-500">Generating your listing with AI…</p>
                 </div>
               )}

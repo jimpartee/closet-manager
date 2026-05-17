@@ -63,7 +63,7 @@ function AddDialog({
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
               placeholder={type === 'location' ? 'e.g. Walk-in Closet' : 'e.g. Travel Bag'}
               autoFocus
             />
@@ -75,7 +75,7 @@ function AddDialog({
             <input
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
               placeholder="Optional"
             />
           </div>
@@ -90,7 +90,7 @@ function AddDialog({
             <button
               type="submit"
               disabled={saving || !name.trim()}
-              className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-violet-600 py-2 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-pink-500 py-2 text-sm font-medium text-white hover:bg-pink-600 disabled:opacity-50"
             >
               {saving && <Loader2 className="h-4 w-4 animate-spin" />}
               Add
@@ -171,7 +171,7 @@ export function LocationsClient({ locations, bags, items }: LocationsClientProps
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {locItems.slice(0, 6).map((item) => (
                         <Link key={item.id} href={`/items/${item.id}`}>
-                          <div className="h-10 w-10 rounded-lg bg-gray-100 overflow-hidden border border-gray-200 hover:border-violet-300 transition-colors">
+                          <div className="h-10 w-10 rounded-lg bg-gray-100 overflow-hidden border border-gray-200 hover:border-pink-300 transition-colors">
                             {item.image_url ? (
                               <img
                                 src={item.image_url}
@@ -246,7 +246,7 @@ export function LocationsClient({ locations, bags, items }: LocationsClientProps
                     <div className="flex flex-wrap gap-1.5">
                       {bagItems.slice(0, 6).map((item) => (
                         <Link key={item.id} href={`/items/${item.id}`}>
-                          <div className="h-10 w-10 rounded-lg bg-gray-100 overflow-hidden border border-gray-200 hover:border-violet-300 transition-colors">
+                          <div className="h-10 w-10 rounded-lg bg-gray-100 overflow-hidden border border-gray-200 hover:border-pink-300 transition-colors">
                             {item.image_url ? (
                               <img
                                 src={item.image_url}

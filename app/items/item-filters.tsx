@@ -77,14 +77,14 @@ export function ItemFilters({ items }: ItemFiltersProps) {
             placeholder="Search items..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+            className="w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
           />
         </div>
 
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
         >
           <option value="">All Categories</option>
           {CATEGORIES.map((c) => (
@@ -95,7 +95,7 @@ export function ItemFilters({ items }: ItemFiltersProps) {
         <select
           value={gender}
           onChange={(e) => setGender(e.target.value)}
-          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
         >
           <option value="">All Genders</option>
           {GENDERS.map((g) => (
@@ -106,7 +106,7 @@ export function ItemFilters({ items }: ItemFiltersProps) {
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value as 'all' | 'active' | 'donated')}
-          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
         >
           <option value="all">All Status</option>
           <option value="active">Active</option>
@@ -121,7 +121,7 @@ export function ItemFilters({ items }: ItemFiltersProps) {
           }}
           className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
             bulkMode
-              ? 'border-violet-300 bg-violet-50 text-violet-700'
+              ? 'border-pink-300 bg-pink-50 text-pink-700'
               : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
           }`}
         >
@@ -141,7 +141,7 @@ export function ItemFilters({ items }: ItemFiltersProps) {
           <button
             type="button"
             onClick={toggleSelectAll}
-            className="text-sm text-violet-600 hover:text-violet-700 font-medium"
+            className="text-sm text-pink-600 hover:text-pink-700 font-medium"
           >
             {allFilteredSelected ? 'Deselect all' : 'Select all'}
           </button>

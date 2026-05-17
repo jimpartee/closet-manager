@@ -87,12 +87,12 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
       <div className="flex items-center gap-3 mb-8">
         <div
           className={`flex items-center gap-2 text-sm font-medium ${
-            step >= 1 ? 'text-violet-600' : 'text-gray-400'
+            step >= 1 ? 'text-pink-600' : 'text-gray-400'
           }`}
         >
           <div
             className={`h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold ${
-              step > 1 ? 'bg-violet-600 text-white' : step === 1 ? 'border-2 border-violet-600 text-violet-600' : 'border-2 border-gray-200 text-gray-400'
+              step > 1 ? 'bg-pink-500 text-white' : step === 1 ? 'border-2 border-pink-600 text-pink-600' : 'border-2 border-gray-200 text-gray-400'
             }`}
           >
             {step > 1 ? <Check className="h-3 w-3" /> : '1'}
@@ -102,12 +102,12 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
         <div className="flex-1 h-px bg-gray-200" />
         <div
           className={`flex items-center gap-2 text-sm font-medium ${
-            step >= 2 ? 'text-violet-600' : 'text-gray-400'
+            step >= 2 ? 'text-pink-600' : 'text-gray-400'
           }`}
         >
           <div
             className={`h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold ${
-              step === 2 ? 'border-2 border-violet-600 text-violet-600' : 'border-2 border-gray-200 text-gray-400'
+              step === 2 ? 'border-2 border-pink-600 text-pink-600' : 'border-2 border-gray-200 text-gray-400'
             }`}
           >
             2
@@ -125,7 +125,7 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
             <input
               value={organization}
               onChange={(e) => setOrganization(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
               placeholder="e.g. Goodwill, Salvation Army"
             />
           </div>
@@ -138,7 +138,7 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
               type="date"
               value={donationDate}
               onChange={(e) => setDonationDate(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
             />
           </div>
 
@@ -148,7 +148,7 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={3}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
               placeholder="Optional notes about this donation..."
             />
           </div>
@@ -161,7 +161,7 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
               }
               setStep(2)
             }}
-            className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors"
+            className="flex items-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-medium text-white hover:bg-pink-600 transition-colors"
           >
             Next: Select Items
             <ChevronRight className="h-4 w-4" />
@@ -192,7 +192,7 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
                   key={item.id}
                   className={`rounded-xl border p-4 cursor-pointer transition-colors ${
                     selected
-                      ? 'border-violet-300 bg-violet-50'
+                      ? 'border-pink-300 bg-pink-50'
                       : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
                   onClick={() => toggleItem(item)}
@@ -200,7 +200,7 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
                   <div className="flex items-center gap-3">
                     <div
                       className={`h-5 w-5 rounded border-2 flex items-center justify-center flex-shrink-0 ${
-                        selected ? 'border-violet-600 bg-violet-600' : 'border-gray-300'
+                        selected ? 'border-pink-600 bg-pink-500' : 'border-gray-300'
                       }`}
                     >
                       {selected && <Check className="h-3 w-3 text-white" />}
@@ -227,7 +227,7 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
 
                   {selected && (
                     <div
-                      className="mt-3 pt-3 border-t border-violet-200"
+                      className="mt-3 pt-3 border-t border-pink-200"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -238,7 +238,7 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
                         step="0.01"
                         value={selected.estimated_value}
                         onChange={(e) => updateValue(item.id, parseFloat(e.target.value) || 0)}
-                        className="w-full rounded border border-violet-200 px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-violet-500"
+                        className="w-full rounded border border-pink-200 px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-pink-500"
                       />
                     </div>
                   )}
@@ -257,7 +257,7 @@ export function NewDonationForm({ items }: NewDonationFormProps) {
           <button
             onClick={handleSubmit}
             disabled={saving || selectedItems.length === 0}
-            className="flex items-center gap-2 rounded-lg bg-violet-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-violet-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg bg-pink-500 px-6 py-2.5 text-sm font-medium text-white hover:bg-pink-600 transition-colors disabled:opacity-50"
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
             Record Donation ({selectedItems.length} items)

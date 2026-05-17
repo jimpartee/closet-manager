@@ -31,7 +31,7 @@ export function FetchPhotoButton({ itemId }: { itemId: string }) {
     <button
       onClick={handleFetch}
       disabled={loading}
-      className="flex items-center gap-2 rounded-lg border border-dashed border-gray-300 px-4 py-2 text-sm font-medium text-gray-500 hover:border-violet-400 hover:text-violet-600 transition-colors disabled:opacity-50"
+      className="flex items-center gap-2 rounded-lg border border-dashed border-gray-300 px-4 py-2 text-sm font-medium text-gray-500 hover:border-pink-400 hover:text-pink-600 transition-colors disabled:opacity-50"
     >
       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
       {loading ? 'Fetching...' : 'Fetch photo from URL'}

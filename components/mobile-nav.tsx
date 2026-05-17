@@ -25,7 +25,7 @@ export function MobileNav() {
 
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 md:hidden bg-slate-900 border-t border-slate-700 z-50"
+      className="fixed bottom-0 inset-x-0 md:hidden bg-white border-t border-pink-100 z-50"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div className="flex">
@@ -35,12 +35,12 @@ export function MobileNav() {
             <Link
               key={href}
               href={href}
-              className={`flex flex-1 flex-col items-center justify-center py-2 gap-0.5 transition-colors ${
-                isActive ? 'text-violet-400' : 'text-slate-500'
+              className={`flex flex-1 flex-col items-center justify-center py-2.5 gap-0.5 transition-colors ${
+                isActive ? 'text-pink-500' : 'text-gray-400 hover:text-pink-400'
               }`}
             >
-              <Icon className="h-5 w-5" />
-              <span className="text-[9px] font-medium leading-none">{label}</span>
+              <Icon className={`h-5 w-5 ${isActive ? 'drop-shadow-sm' : ''}`} />
+              <span className="text-[9px] font-semibold leading-none">{label}</span>
             </Link>
           )
         })}

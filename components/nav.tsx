@@ -24,12 +24,16 @@ export function Nav() {
   const pathname = usePathname()
 
   return (
-    <nav className="flex h-full w-60 flex-col bg-slate-900 text-slate-100">
-      <div className="flex items-center gap-2 px-6 py-6 border-b border-slate-700">
-        <Shirt className="h-6 w-6 text-violet-400" />
-        <span className="text-lg font-semibold tracking-tight">Closet Manager</span>
+    <nav className="flex h-full w-60 flex-col bg-white border-r border-pink-100">
+      <div className="flex items-center gap-2.5 px-6 py-6 border-b border-pink-100">
+        <div className="rounded-xl bg-gradient-to-br from-pink-400 to-pink-600 p-1.5">
+          <Shirt className="h-5 w-5 text-white" />
+        </div>
+        <span className="text-lg font-semibold tracking-tight text-gray-900" style={{ fontFamily: 'var(--font-heading)' }}>
+          Closet Manager
+        </span>
       </div>
-      <div className="flex flex-col gap-1 p-3 flex-1">
+      <div className="flex flex-col gap-0.5 p-3 flex-1">
         {navItems.map(({ href, label, icon: Icon }) => {
           const isActive =
             href === '/' ? pathname === '/' : pathname.startsWith(href)
@@ -37,17 +41,20 @@ export function Nav() {
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                 isActive
-                  ? 'bg-violet-600 text-white'
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                  ? 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-sm shadow-pink-200'
+                  : 'text-gray-500 hover:bg-pink-50 hover:text-pink-600'
               }`}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-4 w-4 flex-shrink-0" />
               {label}
             </Link>
           )
         })}
+      </div>
+      <div className="px-4 py-4 border-t border-pink-100">
+        <p className="text-[10px] text-pink-300 font-medium uppercase tracking-widest">Your Style, Organized</p>
       </div>
     </nav>
   )
