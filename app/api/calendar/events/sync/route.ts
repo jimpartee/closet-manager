@@ -14,6 +14,7 @@ export async function POST() {
   }
 
   let synced = 0
+  const errors: string[] = []
   for (const account of accounts) {
     try {
       const oauth2Client = new google.auth.OAuth2(
@@ -45,10 +46,13 @@ export async function POST() {
 
       await syncEventsForAccount(oauth2Client, account.id)
       synced++
-    } catch {
-      // Continue with other accounts if one fails
+    } catch (err) {
+      errors.push(`${account.email}: ${err instanceof Error ? err.message : String(err)}`)
     }
   }
 
-  return NextResponse.json({ synced })
+  if (errors.length > 0 && synced === 0) {
+    return NextResponse.json({ error: errors.join('; ') }, { status: 500 })
+  }
+  return NextResponse.json({ synced, errors })
 }

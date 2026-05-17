@@ -63,7 +63,8 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
       const res = await fetch('/api/calendar/events/sync', { method: 'POST' })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      toast.success('Calendar synced')
+      if (data.errors?.length) toast.error(`Sync issues: ${data.errors.join('; ')}`)
+      else toast.success('Calendar synced')
       await loadData()
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Sync failed')
