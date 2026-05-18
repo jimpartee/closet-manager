@@ -71,6 +71,41 @@ export interface DonationItem {
   item?: Item
 }
 
+export interface CalendarAccount {
+  id: string
+  email: string
+  access_token: string
+  refresh_token?: string
+  token_expiry?: string
+  created_at: string
+}
+
+export interface CalendarEvent {
+  id: string
+  calendar_account_id: string
+  google_event_id: string
+  title?: string
+  description?: string
+  start_time: string
+  end_time?: string
+  location?: string
+  calendar_id?: string
+  is_all_day: boolean
+  created_at: string
+  updated_at: string
+  calendar_account?: CalendarAccount
+  event_bags?: EventBag[]
+}
+
+export interface EventBag {
+  id: string
+  calendar_event_id: string
+  bag_id: string
+  notes?: string
+  created_at: string
+  bag?: Bag
+}
+
 export const GENDERS = ["Men's", "Women's", "Unisex"]
 
 export const CATEGORIES = [

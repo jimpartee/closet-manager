@@ -9,6 +9,7 @@ import {
   Heart,
   Mail,
   Sparkles,
+  CalendarDays,
 } from 'lucide-react'
 
 const navItems = [
@@ -18,6 +19,7 @@ const navItems = [
   { href: '/donations', label: 'Donations', icon: Heart },
   { href: '/email-scan', label: 'Email Scan', icon: Mail },
   { href: '/outfits', label: 'Outfits', icon: Sparkles },
+  { href: '/calendar', label: 'Calendar', icon: CalendarDays },
 ]
 
 export function Nav() {
