@@ -32,8 +32,6 @@ export interface Item {
   product_url?: string
   image_url?: string
   notes?: string
-  status: 'active' | 'donated'
-  cleanliness: 'clean' | 'dirty'
   status: 'active' | 'donated' | 'lost'
   cleanliness?: 'clean' | 'dirty'
   location_id?: string
