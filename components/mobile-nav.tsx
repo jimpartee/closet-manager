@@ -10,11 +10,13 @@ import {
   Mail,
   Sparkles,
   CalendarDays,
+  WashingMachine,
 } from 'lucide-react'
 
 const navItems = [
   { href: '/', label: 'Home', icon: LayoutDashboard },
   { href: '/items', label: 'Wardrobe', icon: Shirt },
+  { href: '/laundry', label: 'Laundry', icon: WashingMachine },
   { href: '/calendar', label: 'Calendar', icon: CalendarDays },
   { href: '/outfits', label: 'Outfits', icon: Sparkles },
   { href: '/donations', label: 'Donate', icon: Heart },
