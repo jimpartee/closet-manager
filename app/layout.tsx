@@ -4,6 +4,7 @@ import './globals.css'
 import { Nav } from '@/components/nav'
 import { MobileNav } from '@/components/mobile-nav'
 import { Toaster } from '@/components/ui/sonner'
+import { CleanlinessOverlay } from '@/components/cleanliness-overlay'
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-sans',
@@ -54,6 +55,7 @@ export default function RootLayout({
         </div>
         <MobileNav />
         <Toaster />
+        <CleanlinessOverlay />
       </body>
     </html>
   )

@@ -32,6 +32,8 @@ export interface Item {
   product_url?: string
   image_url?: string
   notes?: string
+  status: 'active' | 'donated'
+  cleanliness: 'clean' | 'dirty'
   status: 'active' | 'donated' | 'lost'
   cleanliness?: 'clean' | 'dirty'
   location_id?: string
@@ -41,6 +43,36 @@ export interface Item {
   updated_at: string
   location?: Location
   bag?: Bag
+}
+
+export interface SavedOutfit {
+  id: string
+  name: string
+  description?: string
+  created_at: string
+  outfit_items?: OutfitItem[]
+}
+
+export interface OutfitItem {
+  id: string
+  outfit_id: string
+  item_id: string
+  created_at: string
+  item?: Item
+}
+
+export interface EventOutfit {
+  id: string
+  calendar_event_id: string
+  outfit_id: string
+  created_at: string
+  outfit?: SavedOutfit
+}
+
+export interface CleanlinessPrompt {
+  item: Item
+  event: CalendarEvent
+  outfit_name: string
 }
 
 export interface PriceAlert {
@@ -95,6 +127,7 @@ export interface CalendarEvent {
   updated_at: string
   calendar_account?: CalendarAccount
   event_bags?: EventBag[]
+  event_outfits?: EventOutfit[]
 }
 
 export interface EventBag {
@@ -117,6 +150,8 @@ export const CATEGORIES = [
   'Accessories',
   'Swimwear',
   'Loungewear/PJs',
+  'Underwear',
+  'Socks',
   'Other',
 ]
 
