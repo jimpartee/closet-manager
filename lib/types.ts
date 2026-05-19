@@ -114,6 +114,8 @@ export const CATEGORIES = [
   'Accessories',
   'Swimwear',
   'Loungewear/PJs',
+  'Underwear',
+  'Socks',
   'Other',
 ]
 
