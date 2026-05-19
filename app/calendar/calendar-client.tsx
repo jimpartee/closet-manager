@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Calendar, Plus, X, RefreshCw, Trash2, LogIn, MapPin, Clock, Briefcase } from 'lucide-react'
+import { Calendar, Plus, X, RefreshCw, Trash2, LogIn, MapPin, Clock, Briefcase, Shirt } from 'lucide-react'
 import { toast } from 'sonner'
 import { format, isToday, isTomorrow, isThisWeek } from 'date-fns'
-import type { CalendarEvent, Bag } from '@/lib/types'
+import type { CalendarEvent, Bag, SavedOutfit } from '@/lib/types'
 
 interface CalendarAccount {
   id: string
@@ -12,6 +12,8 @@ interface CalendarAccount {
   token_expiry?: string
   created_at: string
 }
+
+type AssignMenu = { eventId: string; type: 'bag' | 'outfit' } | null
 
 interface CalendarClientProps {
   connected: boolean
@@ -22,28 +24,32 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
   const [accounts, setAccounts] = useState<CalendarAccount[]>([])
   const [events, setEvents] = useState<CalendarEvent[]>([])
   const [bags, setBags] = useState<Bag[]>([])
+  const [outfits, setOutfits] = useState<SavedOutfit[]>([])
   const [loading, setLoading] = useState(true)
   const [syncing, setSyncing] = useState(false)
-  const [assigningEventId, setAssigningEventId] = useState<string | null>(null)
+  const [assignMenu, setAssignMenu] = useState<AssignMenu>(null)
 
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const [accountsRes, eventsRes, bagsRes] = await Promise.all([
+      const [accountsRes, eventsRes, bagsRes, outfitsRes] = await Promise.all([
         fetch('/api/calendar/accounts'),
         fetch('/api/calendar/events'),
         fetch('/api/bags'),
+        fetch('/api/saved-outfits'),
       ])
-      const [accountsData, eventsData, bagsData] = await Promise.all([
+      const [accountsData, eventsData, bagsData, outfitsData] = await Promise.all([
         accountsRes.json(),
         eventsRes.json(),
         bagsRes.json(),
+        outfitsRes.json(),
       ])
       if (!accountsRes.ok) toast.error(`Accounts error: ${accountsData?.error ?? accountsRes.status}`)
       if (!eventsRes.ok) toast.error(`Events error: ${eventsData?.error ?? eventsRes.status}`)
       setAccounts(Array.isArray(accountsData) ? accountsData : [])
       setEvents(Array.isArray(eventsData) ? eventsData : [])
       setBags(Array.isArray(bagsData) ? bagsData : [])
+      setOutfits(Array.isArray(outfitsData) ? outfitsData : [])
     } catch {
       toast.error('Failed to load calendar data')
     } finally {
@@ -56,6 +62,14 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
     if (error) toast.error(`Connection failed: ${error}`)
     loadData()
   }, [connected, error, loadData])
+
+  // Close assign menu on outside click
+  useEffect(() => {
+    if (!assignMenu) return
+    const handler = () => setAssignMenu(null)
+    document.addEventListener('click', handler)
+    return () => document.removeEventListener('click', handler)
+  }, [assignMenu])
 
   const handleSync = async () => {
     setSyncing(true)
@@ -95,13 +109,9 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       setEvents((prev) =>
-        prev.map((e) =>
-          e.id === eventId
-            ? { ...e, event_bags: [...(e.event_bags ?? []), data] }
-            : e
-        )
+        prev.map((e) => e.id === eventId ? { ...e, event_bags: [...(e.event_bags ?? []), data] } : e)
       )
-      setAssigningEventId(null)
+      setAssignMenu(null)
       toast.success('Bag assigned')
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to assign bag')
@@ -110,20 +120,50 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
 
   const handleRemoveBag = async (eventId: string, bagId: string) => {
     try {
-      const res = await fetch(`/api/calendar/events/${eventId}/bags/${bagId}`, {
-        method: 'DELETE',
-      })
+      const res = await fetch(`/api/calendar/events/${eventId}/bags/${bagId}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Failed to remove bag')
       setEvents((prev) =>
-        prev.map((e) =>
-          e.id === eventId
-            ? { ...e, event_bags: (e.event_bags ?? []).filter((eb) => eb.bag_id !== bagId) }
-            : e
+        prev.map((e) => e.id === eventId
+          ? { ...e, event_bags: (e.event_bags ?? []).filter((eb) => eb.bag_id !== bagId) }
+          : e
         )
       )
-      toast.success('Bag removed')
     } catch {
       toast.error('Failed to remove bag')
+    }
+  }
+
+  const handleAssignOutfit = async (eventId: string, outfitId: string) => {
+    try {
+      const res = await fetch(`/api/calendar/events/${eventId}/outfits`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ outfit_id: outfitId }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setEvents((prev) =>
+        prev.map((e) => e.id === eventId ? { ...e, event_outfits: [...(e.event_outfits ?? []), data] } : e)
+      )
+      setAssignMenu(null)
+      toast.success('Outfit assigned')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to assign outfit')
+    }
+  }
+
+  const handleRemoveOutfit = async (eventId: string, outfitId: string) => {
+    try {
+      const res = await fetch(`/api/calendar/events/${eventId}/outfits/${outfitId}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed to remove outfit')
+      setEvents((prev) =>
+        prev.map((e) => e.id === eventId
+          ? { ...e, event_outfits: (e.event_outfits ?? []).filter((eo) => eo.outfit_id !== outfitId) }
+          : e
+        )
+      )
+    } catch {
+      toast.error('Failed to remove outfit')
     }
   }
 
@@ -140,7 +180,6 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
     return format(new Date(dateStr), 'h:mm a')
   }
 
-  // Group events by date label
   const grouped: Record<string, CalendarEvent[]> = {}
   for (const event of events) {
     const label = getDateLabel(event.start_time)
@@ -148,17 +187,12 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
     grouped[label].push(event)
   }
 
-  const assignedBagIds = (event: CalendarEvent) =>
-    new Set((event.event_bags ?? []).map((eb) => eb.bag_id))
-
   return (
     <div className="space-y-6">
       {/* Connected accounts */}
       <div className="bg-white rounded-2xl border border-pink-100 p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-widest">
-            Connected Accounts
-          </h2>
+          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-widest">Connected Accounts</h2>
           <div className="flex gap-2">
             {accounts.length > 0 && (
               <button
@@ -186,17 +220,12 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
               <Calendar className="h-8 w-8 text-pink-400" />
             </div>
             <p className="text-sm font-medium text-gray-600">No accounts connected</p>
-            <p className="text-xs text-gray-400 mt-1">
-              Connect your Google Calendar to see upcoming events
-            </p>
+            <p className="text-xs text-gray-400 mt-1">Connect your Google Calendar to see upcoming events</p>
           </div>
         ) : (
           <div className="space-y-2">
             {accounts.map((account) => (
-              <div
-                key={account.id}
-                className="flex items-center justify-between rounded-xl bg-pink-50 px-4 py-3"
-              >
+              <div key={account.id} className="flex items-center justify-between rounded-xl bg-pink-50 px-4 py-3">
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center text-white text-xs font-bold">
                     {account.email[0].toUpperCase()}
@@ -219,9 +248,7 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
       {/* Events */}
       {accounts.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-widest px-1">
-            Upcoming Events
-          </h2>
+          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-widest px-1">Upcoming Events</h2>
 
           {loading ? (
             <div className="space-y-3">
@@ -232,36 +259,28 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
           ) : events.length === 0 ? (
             <div className="bg-white rounded-2xl border border-pink-100 p-10 text-center">
               <p className="text-sm text-gray-400">No upcoming events in the next 60 days</p>
-              <button
-                onClick={handleSync}
-                disabled={syncing}
-                className="mt-3 text-xs text-pink-500 hover:text-pink-600 font-medium"
-              >
+              <button onClick={handleSync} disabled={syncing} className="mt-3 text-xs text-pink-500 hover:text-pink-600 font-medium">
                 Sync to check again
               </button>
             </div>
           ) : (
             Object.entries(grouped).map(([dateLabel, dayEvents]) => (
               <div key={dateLabel}>
-                <h3 className="text-xs font-semibold text-pink-400 uppercase tracking-widest mb-2 px-1">
-                  {dateLabel}
-                </h3>
+                <h3 className="text-xs font-semibold text-pink-400 uppercase tracking-widest mb-2 px-1">{dateLabel}</h3>
                 <div className="space-y-2">
                   {dayEvents.map((event) => {
-                    const assigned = assignedBagIds(event)
-                    const availableBags = bags.filter((b) => !assigned.has(b.id))
-                    const isAssigning = assigningEventId === event.id
+                    const assignedBagIds = new Set((event.event_bags ?? []).map((eb) => eb.bag_id))
+                    const assignedOutfitIds = new Set((event.event_outfits ?? []).map((eo) => eo.outfit_id))
+                    const availableBags = bags.filter((b) => !assignedBagIds.has(b.id))
+                    const availableOutfits = outfits.filter((o) => !assignedOutfitIds.has(o.id))
+                    const isBagMenu = assignMenu?.eventId === event.id && assignMenu.type === 'bag'
+                    const isOutfitMenu = assignMenu?.eventId === event.id && assignMenu.type === 'outfit'
 
                     return (
-                      <div
-                        key={event.id}
-                        className="bg-white rounded-2xl border border-pink-100 p-4 hover:border-pink-200 transition-all"
-                      >
+                      <div key={event.id} className="bg-white rounded-2xl border border-pink-100 p-4 hover:border-pink-200 transition-all">
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-gray-900 text-sm truncate">
-                              {event.title ?? '(No title)'}
-                            </p>
+                            <p className="font-medium text-gray-900 text-sm truncate">{event.title ?? '(No title)'}</p>
                             <div className="flex flex-wrap items-center gap-3 mt-1">
                               <span className="flex items-center gap-1 text-xs text-gray-400">
                                 <Clock className="h-3 w-3" />
@@ -274,9 +293,7 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
                                 </span>
                               )}
                               {event.calendar_account && (
-                                <span className="text-xs text-pink-300">
-                                  {event.calendar_account.email}
-                                </span>
+                                <span className="text-xs text-pink-300">{event.calendar_account.email}</span>
                               )}
                             </div>
 
@@ -284,16 +301,25 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
                             {(event.event_bags ?? []).length > 0 && (
                               <div className="flex flex-wrap gap-1.5 mt-2">
                                 {(event.event_bags ?? []).map((eb) => (
-                                  <span
-                                    key={eb.id}
-                                    className="flex items-center gap-1 rounded-full bg-pink-100 text-pink-700 text-xs font-medium px-2.5 py-0.5"
-                                  >
+                                  <span key={eb.id} className="flex items-center gap-1 rounded-full bg-pink-100 text-pink-700 text-xs font-medium px-2.5 py-0.5">
                                     <Briefcase className="h-3 w-3" />
                                     {eb.bag?.name}
-                                    <button
-                                      onClick={() => handleRemoveBag(event.id, eb.bag_id)}
-                                      className="text-pink-400 hover:text-pink-700 ml-0.5"
-                                    >
+                                    <button onClick={() => handleRemoveBag(event.id, eb.bag_id)} className="text-pink-400 hover:text-pink-700 ml-0.5">
+                                      <X className="h-3 w-3" />
+                                    </button>
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Assigned outfits */}
+                            {(event.event_outfits ?? []).length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 mt-1.5">
+                                {(event.event_outfits ?? []).map((eo) => (
+                                  <span key={eo.id} className="flex items-center gap-1 rounded-full bg-violet-100 text-violet-700 text-xs font-medium px-2.5 py-0.5">
+                                    <Shirt className="h-3 w-3" />
+                                    {eo.outfit?.name}
+                                    <button onClick={() => handleRemoveOutfit(event.id, eo.outfit_id)} className="text-violet-400 hover:text-violet-700 ml-0.5">
                                       <X className="h-3 w-3" />
                                     </button>
                                   </span>
@@ -302,34 +328,51 @@ export function CalendarClient({ connected, error }: CalendarClientProps) {
                             )}
                           </div>
 
-                          {/* Assign bag button */}
-                          {availableBags.length > 0 && (
-                            <div className="relative flex-shrink-0">
-                              <button
-                                onClick={() =>
-                                  setAssigningEventId(isAssigning ? null : event.id)
-                                }
-                                className="flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-medium text-pink-500 bg-pink-50 hover:bg-pink-100 transition-colors"
-                              >
-                                <Plus className="h-3.5 w-3.5" />
-                                Bag
-                              </button>
-                              {isAssigning && (
-                                <div className="absolute right-0 top-8 z-10 bg-white rounded-xl shadow-lg border border-pink-100 py-1 min-w-[180px]">
-                                  {availableBags.map((bag) => (
-                                    <button
-                                      key={bag.id}
-                                      onClick={() => handleAssignBag(event.id, bag.id)}
-                                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-700 flex items-center gap-2"
-                                    >
-                                      <Briefcase className="h-3.5 w-3.5 text-pink-400" />
-                                      {bag.name}
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          )}
+                          {/* Assign buttons */}
+                          <div className="flex gap-1.5 flex-shrink-0">
+                            {availableBags.length > 0 && (
+                              <div className="relative">
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); setAssignMenu(isBagMenu ? null : { eventId: event.id, type: 'bag' }) }}
+                                  className="flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-medium text-pink-500 bg-pink-50 hover:bg-pink-100 transition-colors"
+                                >
+                                  <Plus className="h-3.5 w-3.5" />
+                                  Bag
+                                </button>
+                                {isBagMenu && (
+                                  <div className="absolute right-0 top-8 z-10 bg-white rounded-xl shadow-lg border border-pink-100 py-1 min-w-[180px]" onClick={(e) => e.stopPropagation()}>
+                                    {availableBags.map((bag) => (
+                                      <button key={bag.id} onClick={() => handleAssignBag(event.id, bag.id)} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-700 flex items-center gap-2">
+                                        <Briefcase className="h-3.5 w-3.5 text-pink-400" />
+                                        {bag.name}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            {availableOutfits.length > 0 && (
+                              <div className="relative">
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); setAssignMenu(isOutfitMenu ? null : { eventId: event.id, type: 'outfit' }) }}
+                                  className="flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-medium text-violet-500 bg-violet-50 hover:bg-violet-100 transition-colors"
+                                >
+                                  <Plus className="h-3.5 w-3.5" />
+                                  Outfit
+                                </button>
+                                {isOutfitMenu && (
+                                  <div className="absolute right-0 top-8 z-10 bg-white rounded-xl shadow-lg border border-violet-100 py-1 min-w-[180px]" onClick={(e) => e.stopPropagation()}>
+                                    {availableOutfits.map((outfit) => (
+                                      <button key={outfit.id} onClick={() => handleAssignOutfit(event.id, outfit.id)} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-violet-50 hover:text-violet-700 flex items-center gap-2">
+                                        <Shirt className="h-3.5 w-3.5 text-violet-400" />
+                                        {outfit.name}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     )

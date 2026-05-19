@@ -16,6 +16,12 @@ export async function GET() {
         notes,
         created_at,
         bag:bags(id, name, description)
+      ),
+      event_outfits(
+        id,
+        outfit_id,
+        created_at,
+        outfit:saved_outfits(id, name, description)
       )
     `)
     .gte('start_time', now)
