@@ -5,6 +5,7 @@ create table locations (
   name text not null,
   type text not null default 'room', -- 'room' or 'bag'
   description text,
+  image_url text,
   created_at timestamptz default now()
 );
 
@@ -13,6 +14,7 @@ create table bags (
   name text not null,
   location_id uuid references locations(id) on delete set null,
   description text,
+  image_url text,
   created_at timestamptz default now()
 );
 
@@ -31,9 +33,10 @@ create table items (
   product_url text,
   image_url text,
   notes text,
-  status text default 'active', -- 'active' or 'donated'
+  status text default 'active', -- 'active', 'donated', or 'lost'
   location_id uuid references locations(id) on delete set null,
   bag_id uuid references bags(id) on delete set null,
+  cleanliness text default 'clean', -- 'clean' or 'dirty'
   gmail_message_id text,
   created_at timestamptz default now(),
   updated_at timestamptz default now()

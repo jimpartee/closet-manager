@@ -18,6 +18,7 @@ export function BulkEditBar({ selectedIds, onCancel, onApplied }: BulkEditBarPro
   const [gender, setGender] = useState(NO_CHANGE)
   const [category, setCategory] = useState(NO_CHANGE)
   const [status, setStatus] = useState(NO_CHANGE)
+  const [cleanliness, setCleanliness] = useState(NO_CHANGE)
   const [locationId, setLocationId] = useState(NO_CHANGE)
   const [bagId, setBagId] = useState(NO_CHANGE)
   const [locations, setLocations] = useState<Location[]>([])
@@ -42,6 +43,7 @@ export function BulkEditBar({ selectedIds, onCancel, onApplied }: BulkEditBarPro
     if (gender !== NO_CHANGE) updates.gender = gender
     if (category !== NO_CHANGE) updates.category = category
     if (status !== NO_CHANGE) updates.status = status
+    if (cleanliness !== NO_CHANGE) updates.cleanliness = cleanliness
     if (locationId !== NO_CHANGE) updates.location_id = locationId === CLEAR ? null : locationId
     if (bagId !== NO_CHANGE) updates.bag_id = bagId === CLEAR ? null : bagId
 
@@ -109,6 +111,16 @@ export function BulkEditBar({ selectedIds, onCancel, onApplied }: BulkEditBarPro
               <option value={NO_CHANGE}>— no change —</option>
               <option value="active">Active</option>
               <option value="donated">Donated</option>
+              <option value="lost">Lost</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-xs text-gray-500">Cleanliness</label>
+            <select value={cleanliness} onChange={(e) => setCleanliness(e.target.value)} className={selectClass}>
+              <option value={NO_CHANGE}>— no change —</option>
+              <option value="clean">Clean</option>
+              <option value="dirty">Dirty</option>
             </select>
           </div>
 

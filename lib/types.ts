@@ -3,6 +3,7 @@ export interface Location {
   name: string
   type: 'room' | 'bag'
   description?: string
+  image_url?: string
   created_at: string
 }
 
@@ -11,6 +12,7 @@ export interface Bag {
   name: string
   location_id?: string
   description?: string
+  image_url?: string
   created_at: string
   location?: Location
 }
@@ -32,6 +34,8 @@ export interface Item {
   notes?: string
   status: 'active' | 'donated'
   cleanliness: 'clean' | 'dirty'
+  status: 'active' | 'donated' | 'lost'
+  cleanliness?: 'clean' | 'dirty'
   location_id?: string
   bag_id?: string
   gmail_message_id?: string
